@@ -1,5 +1,6 @@
 # Autonomous Agentic Evaluation & Deterministic Guardrail Harness
 
+[![CI](https://github.com/Arun660248/autonomous-agentic-eval-harness/actions/workflows/ci.yml/badge.svg)](https://github.com/Arun660248/autonomous-agentic-eval-harness/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue?style=flat-square&logo=python)](https://python.org)
 [![LangGraph](https://img.shields.io/badge/Orchestrator-LangGraph_Cyclic_Graph-00c853?style=flat-square)](https://langchain-ai.github.io/langgraph/)
 [![SQLite Memory](https://img.shields.io/badge/Storage-Embedded_SQLite_Engine-003B57?style=flat-square&logo=sqlite)](https://sqlite.org/)
@@ -9,7 +10,7 @@
 [![License](https://img.shields.io/badge/License-MIT-black?style=flat-square)](LICENSE)
 
 > **Live Production Deployment:** [https://www.arunjyoticode.me](https://www.arunjyoticode.me)  
-> *Engineered by **Arun Jyoti Chakraborty** (2nd-Year B.Sc. Hons. Data Science & AI, IIT Guwahati).*  
+> *Engineered by **Arun Jyoti Chakraborty** (3rd-Year B.Sc. Hons. Data Science & AI, IIT Guwahati).*  
 > *This autonomous evaluation and guardrail harness is actively running in production as the core intelligence engine behind **ARUN.AI** on `arunjyoticode.me`.*
 
 ---
