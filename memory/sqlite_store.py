@@ -3,7 +3,6 @@ Embedded SQLite Factual Grounding & Session Memory Store.
 """
 
 import sqlite3
-import json
 from typing import List, Dict, Any
 
 DEFAULT_FACTS = [
@@ -51,7 +50,8 @@ class SQLiteMemoryStore:
         return sqlite3.connect(self.db_path)
 
     def _init_db(self):
-        with self._get_connection() as conn:
+        conn = self._get_connection()
+        try:
             cursor = conn.cursor()
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS knowledge_base (
@@ -82,13 +82,18 @@ class SQLiteMemoryStore:
                         VALUES (?, ?, ?, ?, ?, ?)
                     """, (f["id"], f["entity"], f["category"], f["content"], f["target_route"], f["claim_metric"]))
                 conn.commit()
+        finally:
+            conn.close()
 
     def retrieve_grounding_facts(self, query: str, pathname: str = None) -> List[Dict[str, Any]]:
         words = [w.lower() for w in query.split() if len(w) > 3]
-        with self._get_connection() as conn:
+        conn = self._get_connection()
+        try:
             cursor = conn.cursor()
             cursor.execute("SELECT id, entity, category, content, target_route, claim_metric FROM knowledge_base")
             rows = cursor.fetchall()
+        finally:
+            conn.close()
 
         scored = []
         for r in rows:
@@ -120,10 +125,14 @@ class SQLiteMemoryStore:
         return [item[1] for item in scored[:3]]
 
     def persist_session_turn(self, session_id: str, query: str, response: str, eval_score: float, latency_ms: int):
-        with self._get_connection() as conn:
+        score = float(eval_score) if eval_score is not None else 0.0
+        conn = self._get_connection()
+        try:
             cursor = conn.cursor()
             cursor.execute("""
                 INSERT INTO audit_sessions (session_id, query, response, eval_score, latency_ms)
                 VALUES (?, ?, ?, ?, ?)
-            """, (session_id, query, response, eval_score, latency_ms))
+            """, (session_id, query, response, score, latency_ms))
             conn.commit()
+        finally:
+            conn.close()

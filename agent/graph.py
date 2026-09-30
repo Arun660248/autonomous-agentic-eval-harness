@@ -97,11 +97,15 @@ User Question: {state['query']}"""
     def persist_node(state: AgentState) -> dict:
         t0 = time.time()
         total_lat = sum(t["latency_ms"] for t in state.get("execution_trace", []))
+        eval_score = state.get("eval_score")
+        if eval_score is None:
+            eval_score = 0.0 if state.get("guardrail_violation") else 1.0
+
         memory_store.persist_session_turn(
             session_id=state.get("session_id", "default"),
             query=state["query"],
             response=state.get("final_output", ""),
-            eval_score=state.get("eval_score", 1.0),
+            eval_score=eval_score,
             latency_ms=total_lat,
         )
         latency = int((time.time() - t0) * 1000)
